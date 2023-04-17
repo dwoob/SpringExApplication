@@ -12,7 +12,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
 @MapperScan(
-	basePackages = {"com.co.kr.mapper"}, // 이부분은 각자 패키지구조로 
+	basePackages = {"com.co.kr.mapper"},
 	annotationClass = org.apache.ibatis.annotations.Mapper.class,
 	sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisConfig {
@@ -20,9 +20,9 @@ public class MybatisConfig {
 	@Bean(name="sqlSessionFactory")
 	 public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
 
-	        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();      //Bean으로 등록할 SqlSessionFactory객체 생성
-	        sqlSessionFactoryBean.setDataSource(dataSource);        //sqlSessionFactoryBean에 dataSource정보를 set함 (Datasource정보는 application.yml에 명시함)
-	        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mybatis/*Mapper.xml"));    //Mapper xml파일의 위치를 명시
+	        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+	        sqlSessionFactoryBean.setDataSource(dataSource);
+	        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mybatis/*Mapper.xml"));
 	        return sqlSessionFactoryBean.getObject();
 
     }

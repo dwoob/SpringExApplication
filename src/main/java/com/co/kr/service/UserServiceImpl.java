@@ -1,12 +1,14 @@
 package com.co.kr.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.co.kr.domain.BoardFileDomain;
+import com.co.kr.domain.BoardListDomain;
 import com.co.kr.domain.LoginDomain;
+import com.co.kr.mapper.UploadMapper;
 import com.co.kr.mapper.UserMapper;
 
 @Service
@@ -15,7 +17,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	@Override
 	public void mbCreate(LoginDomain loginDomain) {
 		userMapper.mbCreate(loginDomain);
 	}
@@ -35,7 +36,6 @@ public class UserServiceImpl implements UserService {
 		userMapper.mbUpdate(loginDomain);
 	}
 
-	@Override
 	public void mbRemove(Map<String, String> map) {
 		userMapper.mbRemove(map);
 	}
@@ -45,16 +45,18 @@ public class UserServiceImpl implements UserService {
 		return userMapper.mbGetId(map);
 	}
 
-	@Override
 	public int mbDuplicationCheck(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return userMapper.mbDuplicationCheck(map);
 	}
 
-	@Override
 	public int mbGetAll() {
-		// TODO Auto-generated method stub
 		return userMapper.mbGetAll();
+	}
+	public BoardListDomain boardSelectOne(HashMap<String, Object> map) {
+		return UploadMapper.boardSelectOne(map);
+	}
+	public List<BoardFileDomain> boardSelectOneFile(HashMap<String, Object> map) {
+		return UploadMapper.boardSelectOneFile(map);
 	}
 
 }

@@ -7,28 +7,32 @@ import com.co.kr.domain.LoginDomain;
 
 
 public interface UserService {
-	  // selectId
+
     public LoginDomain mbSelectList(Map<String, String> map);
     
-    // selectAll
     public List<LoginDomain> mbAllList(Map<String, Integer> map);
     
-    // selectAll Conut
-    public int mbGetAll();
-    
-    //신규
-    public void mbCreate(LoginDomain loginDomain);
-    
-    //getMbIdCheck
+    public static int mbGetAll() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+    public static void mbCreate(LoginDomain loginDomain) {
+		// TODO Auto-generated method stub
+		
+	}
+
     public LoginDomain mbGetId(Map<String, String> map);
     
-    //mbDuplicationCheck
-    public int mbDuplicationCheck(Map<String, String> map);
-    
-    //update
+    public static int mbDuplicationCheck(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
     public void mbUpdate(LoginDomain loginDomain); 
-    
-    //delete 
-    public void mbRemove(Map<String, String> map); 
+
+    public static void mbRemove(Map<String, String> map) {
+		// TODO Auto-generated method stub
+	} 
     
 }

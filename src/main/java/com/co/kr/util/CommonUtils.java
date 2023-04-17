@@ -15,14 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class CommonUtils {
 	
-	// 날짜
 	public static String currentTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
 		Date currentDate = new Date();
 		return sdf.format(currentDate);
 	}
 	
-	//get iP
 	public static String getClientIP(HttpServletRequest req) {
 		String ip = req.getHeader("X-Forwarded-For");
 		if(ip == null) {
@@ -46,13 +44,11 @@ public class CommonUtils {
 		return ip;
 	};
 	
-	
-	// auth redirect
 	public static void redirect(String alertText, String redirectPath, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		ModelAndView mav = new ModelAndView();
-		// 개발용 리다이렉트
+		
 		out.println("<script>alert('"+ alertText +"'); location.href='" + redirectPath + "'</script>");
 		out.flush();
 	}
