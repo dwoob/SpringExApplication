@@ -40,17 +40,17 @@ public class UserController {
 	@Autowired
 	private UploadService uploadService;
 
-	@RequestMapping(value = "board")
+	@GetMapping("board")
 	public ModelAndView login(LoginVO loginDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+ 
 		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
 
-		Map<String, String> map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("mbId", loginDTO.getId());
 		map.put("mbPw", loginDTO.getPw());
 
-		int dupleCheck = UserService.mbDuplicationCheck(map);
+		int dupleCheck = userService.mbDuplicationCheck(map);
 		LoginDomain loginDomain = userService.mbGetId(map);
 		
 		if(dupleCheck == 0) {  
@@ -73,7 +73,7 @@ public class UserController {
 		
 		return mav;
 	};
-	@RequestMapping(value = "bdList")
+	@GetMapping("bdList")
 	public ModelAndView bdList() { 
 		ModelAndView mav = new ModelAndView();
 		List<BoardListDomain> items = uploadService.boardList();
@@ -81,188 +81,172 @@ public class UserController {
 		mav.addObject("items", items);
 		mav.setViewName("board/boardList.html");
 		return mav; 
-	};
-	@GetMapping("mbList")
-	public ModelAndView mbList(HttpServletRequest request) {
-			
-		ModelAndView mav = new ModelAndView();
-		HttpSession session = request.getSession();
+	}
+		@GetMapping("mbList")
+		public ModelAndView mbList(HttpServletRequest request) {
+				
+			ModelAndView mav = new ModelAndView();
+			HttpSession session = request.getSession();
+			String page = (String) session.getAttribute("page");
+			if(page == null)page = "1";
 
-		String page = (String) session.getAttribute("page");
-		String paramPage = request.getParameter("page");
-		
-		
-		if(paramPage != null) {
-			session.setAttribute("page", paramPage);
-		}else if(page != null) {
 			session.setAttribute("page", page);
-		}else {
-			session.setAttribute("page", "1");
-		}
 
-		mav = mbListCall(request);
-		
-		mav.setViewName("admin/adminList.html");
-		return mav; 
-	};
-	
-    public ModelAndView mbListCall(HttpServletRequest request) { //클릭페이지 널이면 
-		ModelAndView mav = new ModelAndView();
-    // SELECT * FROM jsp.member order by mb_update_at limit 1, 5; {offset}{limit}
-
-		int totalcount = UserService.mbGetAll();
-		int contentnum = 10;
-
-		boolean itemsNotEmpty;
-		
-		if(totalcount > 0) {
-
-			itemsNotEmpty = true;
-
-			Map<String,Object> pagination = Pagination.pagination(totalcount, request);
+			mav = mbListCall(request);
 			
-			Map map = new HashMap<String, Integer>();
-	        map.put("offset",pagination.get("offset"));
-	        map.put("contentnum",contentnum);
+			mav.setViewName("admin/adminList.html");
+			return mav; 
+		};
+	    public ModelAndView mbListCall(HttpServletRequest request) { 
+			ModelAndView mav = new ModelAndView();
 
-			List<LoginDomain> loginDomain = userService.mbAllList(map);
+			int totalcount = userService.mbGetAll();
+			int contentnum = 10;
 
-			mav.addObject("itemsNotEmpty", itemsNotEmpty);
-			mav.addObject("items", loginDomain);
-			mav.addObject("rowNUM", pagination.get("rowNUM"));
-			mav.addObject("pageNum", pagination.get("pageNum"));
-			mav.addObject("startpage", pagination.get("startpage"));
-			mav.addObject("endpage", pagination.get("endpage"));
+			boolean itemsNotEmpty;
 			
-		}else {
-			itemsNotEmpty = false;
-		}
-		
-		return mav;
-	};
-	@GetMapping("/modify/{mbSeq}")
-    public ModelAndView mbModify(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re) throws IOException {
-		ModelAndView mav = new ModelAndView();
-		re.addAttribute("mbSeq", mbSeq);
-		mav.setViewName("redirect:/mbEditList");
-		return mav;
-	};
-	@GetMapping("mbEditList")
-	public ModelAndView mbListEdit(@RequestParam("mbSeq") String mbSeq, HttpServletRequest request) {
-		
-		ModelAndView mav = new ModelAndView();
+			if(totalcount > 0) {
+				
+				itemsNotEmpty = true;
 
-		mav = mbListCall(request);
-		Map map = new HashMap<String, String>();
-		map.put("mbSeq", mbSeq);
-		LoginDomain loginDomain = userService.mbSelectList(map);
-		System.out.println("loginDomain"+loginDomain.getMbLevel());
-		mav.addObject("item",loginDomain);
-		mav.setViewName("admin/adminEditList.html");
-		return mav; 
-	};
-	@RequestMapping("/update")
-	public ModelAndView mbModify(LoginVO loginVO, HttpServletRequest request, RedirectAttributes re) throws IOException {
-		
-		ModelAndView mav = new ModelAndView();
+				Map<String,Object> pagination = Pagination.pagination(totalcount, request);
+				
+				Map map = new HashMap<String, Integer>();
+		        map.put("offset",pagination.get("offset"));
+		        map.put("contentnum",contentnum);
 
-		HttpSession session = request.getSession();
-		
-		String page = "1";
+				List<LoginDomain> loginDomain = userService.mbAllList(map);
 
-		LoginDomain loginDomain = null;
-		String IP = CommonUtils.getClientIP(request);
-		loginDomain = LoginDomain.builder()
-				.mbSeq(Integer.parseInt(loginVO.getSeq()))
-				.mbId(loginVO.getId())
-				.mbPw(loginVO.getPw())
-				.mbLevel(loginVO.getLevel())
-				.mbIp(IP)
-				.mbUse("Y")
-				.build();
-		userService.mbUpdate(loginDomain);
-
-		re.addAttribute("page",page);
-		mav.setViewName("redirect:/mbList");
-		return mav;
-	};
-	@GetMapping("/remove/{mbSeq}")
-    public ModelAndView mbRemove(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re, HttpServletRequest request) throws IOException {
-		ModelAndView mav = new ModelAndView();
-
-		Map map = new HashMap<String, String>();
-		map.put("mbSeq", mbSeq);
-		UserService.mbRemove(map);
-
-		HttpSession session = request.getSession();
-
-		re.addAttribute("page",session.getAttribute("page"));
-		mav.setViewName("redirect:/mbList");
-		return mav;
-	};
-	@PostMapping("create")
-	public ModelAndView create(LoginVO loginVO, HttpServletRequest request,HttpServletResponse response) throws IOException {
-		
-		ModelAndView mav = new ModelAndView();
-
-		HttpSession session = request.getSession();
-
-		String page = (String) session.getAttribute("page");
-		if(page == null)page = "1";
-
-		Map<String, String> map = new HashMap();
-		map.put("mbId", loginVO.getId());
-		map.put("mbPw", loginVO.getPw());
-
-		int dupleCheck = UserService.mbDuplicationCheck(map);
-		System.out.println(dupleCheck);
-
-		if(dupleCheck > 0) {
-			String alertText = "중복이거나 유효하지 않은 접근입니다";
-			String redirectPath = "/main";
-			System.out.println(loginVO.getAdmin());
-			if(loginVO.getAdmin() != null) {
-				redirectPath = "/main/mbList?page="+page;
+				mav.addObject("itemsNotEmpty", itemsNotEmpty);
+				mav.addObject("items", loginDomain);
+				mav.addObject("rowNUM", pagination.get("rowNUM"));
+				mav.addObject("pageNum", pagination.get("pageNum"));
+				mav.addObject("startpage", pagination.get("startpage"));
+				mav.addObject("endpage", pagination.get("endpage"));
+				
+			}else {
+				itemsNotEmpty = false;
 			}
-			CommonUtils.redirect(alertText, redirectPath, response);
-		}else {
+			
+			return mav;
+		};
+		@GetMapping("/modify/{mbSeq}")
+	    public ModelAndView mbModify(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re) throws IOException {
+			ModelAndView mav = new ModelAndView();
+			re.addAttribute("mbSeq", mbSeq);
+			mav.setViewName("redirect:/mbEditList");
+			return mav;
+		};
+		@GetMapping("mbEditList")
+		public ModelAndView mbListEdit(@RequestParam("mbSeq") String mbSeq, HttpServletRequest request) {
+			
+			ModelAndView mav = new ModelAndView();
 
+			mav = mbListCall(request);  
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("mbSeq", mbSeq);
+			LoginDomain loginDomain = userService.mbSelectList(map);
+			mav.addObject("item",loginDomain);
+			mav.setViewName("admin/adminEditList.html");
+			return mav; 
+		};
+		@GetMapping("/update")
+		public ModelAndView mbModify(LoginVO loginVO, HttpServletRequest request, RedirectAttributes re) throws IOException {
+			
+			ModelAndView mav = new ModelAndView();
+			HttpSession session = request.getSession();
+			
+			String page = "1"; 
+
+			LoginDomain loginDomain = null;
 			String IP = CommonUtils.getClientIP(request);
-
-			int totalcount = UserService.mbGetAll();
-
-			LoginDomain loginDomain = LoginDomain.builder()
+			loginDomain = LoginDomain.builder()
+					.mbSeq(Integer.parseInt(loginVO.getSeq()))
 					.mbId(loginVO.getId())
 					.mbPw(loginVO.getPw())
-					.mbLevel((totalcount == 0) ? "3" : "2")  // 최초가입자를 level 3 admin 부여
+					.mbLevel(loginVO.getLevel())
 					.mbIp(IP)
 					.mbUse("Y")
 					.build();
-			UserService.mbCreate(loginDomain);
+			userService.mbUpdate(loginDomain);
+
+			re.addAttribute("page",page);
+			mav.setViewName("redirect:/mbList");
+			return mav;
+		};
+		@GetMapping("/remove/{mbSeq}")
+	    public ModelAndView mbRemove(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re, HttpServletRequest request) throws IOException {
+			ModelAndView mav = new ModelAndView();
+
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("mbSeq", mbSeq);
+			userService.mbRemove(map);
+
+			HttpSession session = request.getSession();
 			
-			if(loginVO.getAdmin() == null) {
-				session.setAttribute("ip",IP);
-				session.setAttribute("id", loginDomain.getMbId());
-				session.setAttribute("mbLevel", (totalcount == 0) ? "3" : "2");   // 최초가입자를 level 3 admin 부여
-				mav.setViewName("redirect:/bdList");
+			re.addAttribute("page",session.getAttribute("page"));
+			mav.setViewName("redirect:/mbList");
+			return mav;
+		};
+		@PostMapping("create")
+		public ModelAndView create(LoginVO loginVO, HttpServletRequest request,HttpServletResponse response) throws IOException {
+			
+			ModelAndView mav = new ModelAndView();
+
+			HttpSession session = request.getSession();
+
+			String page = (String) session.getAttribute("page");
+			if(page == null)page = "1";
+
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("mbId", loginVO.getId());
+			map.put("mbPw", loginVO.getPw());
+
+			int dupleCheck = userService.mbDuplicationCheck(map);
+			System.out.println(dupleCheck);
+
+			if(dupleCheck > 0) { 
+				String alertText = "중복이거나 유효하지 않은 접근입니다";
+				String redirectPath = "/main";
+				System.out.println(loginVO.getAdmin());
+				if(loginVO.getAdmin() != null) {
+					redirectPath = "/main/mbList?page="+page;
+				}
+				CommonUtils.redirect(alertText, redirectPath, response);
 			}else {
-				mav.setViewName("redirect:/mbList?page=1");
+
+				String IP = CommonUtils.getClientIP(request);
+
+				int totalcount = userService.mbGetAll();
+
+				LoginDomain loginDomain = LoginDomain.builder()
+						.mbId(loginVO.getId())
+						.mbPw(loginVO.getPw())
+						.mbLevel((totalcount == 0) ? "3" : "2")
+						.mbIp(IP)
+						.mbUse("Y")
+						.build();
+
+				userService.mbCreate(loginDomain);
+				
+				if(loginVO.getAdmin() == null) {
+
+					session.setAttribute("ip",IP);
+					session.setAttribute("id", loginDomain.getMbId());
+					session.setAttribute("mbLevel", (totalcount == 0) ? "3" : "2");
+					mav.setViewName("redirect:/bdList");
+				}else {
+					mav.setViewName("redirect:/mbList?page=1");
+				}
 			}
+			return mav;
+		};
+		@GetMapping("logout")
+		public ModelAndView logout(HttpServletRequest request) {
+			ModelAndView mav = new ModelAndView();
+			HttpSession session = request.getSession();
+			session.invalidate();
+			mav.setViewName("index.html");
+			return mav;
 		}
-		return mav;
-	};
-	@GetMapping("signin")
-    public ModelAndView signIn() throws IOException {
-		ModelAndView mav = new ModelAndView();
-        mav.setViewName("signin/signin.html"); 
-        return mav;
-    }
-	@RequestMapping("logout")
-	public ModelAndView logout(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView();
-		HttpSession session = request.getSession();
-		session.invalidate();
-		mav.setViewName("index.html");
-		return mav;
-	}
 }

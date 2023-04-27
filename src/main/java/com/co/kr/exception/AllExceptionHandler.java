@@ -17,14 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ControllerAdvice
 public class AllExceptionHandler {
-	
-	
-	// request error
+
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public HttpEntity<ErrorResponse> handlerBindingResultException(RequestException exception){
-		
-		// catch exception
+
 		if(exception.getException() != null) {
 			Exception ex = exception.getException();
 			StackTraceElement [] steArr = ex.getStackTrace();
@@ -32,8 +29,6 @@ public class AllExceptionHandler {
 				System.out.println(ste.toString());
 			}
 		}
-		
-		// response 담기
 		ErrorResponse errRes = ErrorResponse.builder()
 				.result(exception.getCode().getResult())
 				.resultDesc(exception.getCode().getResultDesc())
@@ -44,9 +39,6 @@ public class AllExceptionHandler {
 		
 		return new ResponseEntity<ErrorResponse>(errRes, errRes.getHttpStatus());
 	}
-	
-	
-	//db error
 	@ExceptionHandler(InternalServerError.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public HttpEntity<ErrorResponse> handelerInternalServerError(InternalException exception) {
@@ -59,8 +51,6 @@ public class AllExceptionHandler {
 				.build();
 		return new ResponseEntity<ErrorResponse>(errRes, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	// error page
 	@ExceptionHandler(Exception.class)
 	public ModelAndView commonException(Exception e) {
 		e.getStackTrace();
@@ -69,5 +59,4 @@ public class AllExceptionHandler {
 		mv.setViewName("commons/commonErr.html");
 		return mv;
 	}
-	
 }

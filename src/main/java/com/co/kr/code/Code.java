@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Code {
 
-	S200(0, "Success"), // 성공
+	S200(0, "Success"),
 	S201(201, "데이터 없음"),
 	E100(-100, "필수 파라메터 에러"),
 	E101(-101, "cmd 에러"),
@@ -26,5 +26,4 @@ public enum Code {
 		this.result = result;
 		this.resultDesc = resultDesc;
 	}
-
 }

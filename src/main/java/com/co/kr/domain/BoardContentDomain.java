@@ -12,5 +12,4 @@ public class BoardContentDomain {
 
 	private String bdTitle;
 	private String bdContent;
-
 }

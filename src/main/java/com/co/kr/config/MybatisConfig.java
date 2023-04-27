@@ -16,14 +16,13 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 	annotationClass = org.apache.ibatis.annotations.Mapper.class,
 	sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisConfig {
-	
-	@Bean(name="sqlSessionFactory")
-	 public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+
+    @Bean(name = "sqlSessionFactory")
+    SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
 
 	        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 	        sqlSessionFactoryBean.setDataSource(dataSource);
 	        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mybatis/*Mapper.xml"));
 	        return sqlSessionFactoryBean.getObject();
-
     }
 }

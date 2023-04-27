@@ -5,7 +5,6 @@
         <a th:href="@{logout}" style="color: #fff">로그아웃</a>
     </button>
 </div>
-
 <div class="title" style="color:#00a2be">보드 리스트</div>
 <form role="form" th:object=${fileListVO} th:action="@{editSave}" method="post" enctype="multipart/form-data">
     <div class="section form">
@@ -23,7 +22,6 @@
                     <input type="text" th:field="*{title}" placeholder="제목" required/>
                 </td>
             </tr>
-            
             <tr> 
                <th>내용</th>
                 <td >
@@ -43,5 +41,4 @@
             <button type="submit" style="margin-right: 11px">내용수정</button>
        </div>
     </div>
-
 </form>

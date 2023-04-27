@@ -6,17 +6,20 @@ import org.springframework.context.annotation.Description;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 
 @Configuration	
 public class WebConfig implements WebMvcConfigurer {
-	@Bean
-	@Description("Thymeleaf template resolver serving HTML")
-	public ClassLoaderTemplateResolver templateResolver() {
+
+    @Bean
+    @Description("Thymeleaf template resolver serving HTML")
+    ClassLoaderTemplateResolver templateResolver() {
+		
 		var templateResolver = new ClassLoaderTemplateResolver();
 		templateResolver.setPrefix("templates/");
 		templateResolver.setSuffix(".html");
@@ -25,22 +28,25 @@ public class WebConfig implements WebMvcConfigurer {
 		templateResolver.setCharacterEncoding("UTF-8");
 		return templateResolver;
 	}
-	@Bean
-	@Description("Thymeleaf template engine with Spring integration")
-	public SpringTemplateEngine templateEngine() {
+
+    @Bean
+    @Description("Thymeleaf template engine with Spring integration")
+    SpringTemplateEngine templateEngine() {
 		var templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
-		templateEngine.addDialect(new LayoutDialect()); //dependency 미리 설정해놓음
+		templateEngine.addDialect(new LayoutDialect());
 		return templateEngine;
 	}
-	@Bean
-	@Description("Thymeleaf view resolver")
-	public ViewResolver viewResolver() {
+
+    @Bean
+    @Description("Thymeleaf view resolver")
+    ViewResolver viewResolver() {
 		var viewResolver = new ThymeleafViewResolver();
 		viewResolver.setTemplateEngine(templateEngine());
 		viewResolver.setCharacterEncoding("UTF-8");
 		return viewResolver;
 	}
+	
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("index.html");
 	}
@@ -48,5 +54,4 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/upload/**").addResourceLocations("file:///C:/upload/");
 	}
-	
 }

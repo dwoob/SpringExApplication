@@ -17,5 +17,4 @@ public class LoginDomain {
 	private String mbUse;
 	private String mbCreateAt;
 	private String mbUpdateAt;
-	
 }

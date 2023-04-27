@@ -25,6 +25,4 @@ public interface UserMapper {
     public void mbUpdate(LoginDomain loginDomain);
     
     public void mbRemove(Map<String, String> map);
-    
 }
-

@@ -1,62 +1,52 @@
 package com.co.kr.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.co.kr.domain.BoardFileDomain;
-import com.co.kr.domain.BoardListDomain;
+
 import com.co.kr.domain.LoginDomain;
-import com.co.kr.mapper.UploadMapper;
 import com.co.kr.mapper.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	private UserMapper userMapper;
+	private UserMapper UserMapper;
 
+	@Override
 	public void mbCreate(LoginDomain loginDomain) {
-		userMapper.mbCreate(loginDomain);
+		UserMapper.mbCreate(loginDomain);
 	}
-
 	@Override
 	public LoginDomain mbSelectList(Map<String, String> map) {
-		return userMapper.mbSelectList(map);
+		return UserMapper.mbSelectList(map);
 	}
-
 	@Override
 	public List<LoginDomain> mbAllList(Map<String, Integer> map) { 
-		return userMapper.mbAllList(map);
+		return UserMapper.mbAllList(map);
 	}
-
 	@Override
 	public void mbUpdate(LoginDomain loginDomain) {
-		userMapper.mbUpdate(loginDomain);
+		UserMapper.mbUpdate(loginDomain);
 	}
-
+	@Override
 	public void mbRemove(Map<String, String> map) {
-		userMapper.mbRemove(map);
+		UserMapper.mbRemove(map);
 	}
-
 	@Override
 	public LoginDomain mbGetId(Map<String, String> map) {
-		return userMapper.mbGetId(map);
+		return UserMapper.mbGetId(map);
 	}
-
+	@Override
 	public int mbDuplicationCheck(Map<String, String> map) {
-		return userMapper.mbDuplicationCheck(map);
-	}
 
+		return UserMapper.mbDuplicationCheck(map);
+	}
+	@Override
 	public int mbGetAll() {
-		return userMapper.mbGetAll();
-	}
-	public BoardListDomain boardSelectOne(HashMap<String, Object> map) {
-		return UploadMapper.boardSelectOne(map);
-	}
-	public List<BoardFileDomain> boardSelectOneFile(HashMap<String, Object> map) {
-		return UploadMapper.boardSelectOneFile(map);
-	}
 
+		return UserMapper.mbGetAll();
+	}
 }

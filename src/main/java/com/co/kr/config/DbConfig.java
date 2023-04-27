@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class DbConfig {
 
-	@Bean(destroyMethod="close")
-	public DataSource dataSource() {
+    @Bean(destroyMethod = "close")
+    DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/jsp?autoReconnect=true&serverTimezone=UTC&characterEncoding=UTF-8");
@@ -28,7 +28,7 @@ public class DbConfig {
 	}
 
     @Bean
-    public DataSourceTransactionManager transactionManager() {
+    DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
 }

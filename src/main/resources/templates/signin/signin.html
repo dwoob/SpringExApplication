@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="//www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,14 +8,12 @@
     <link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui-1.12.1.css}">
     <link rel="stylesheet" th:href="@{css/jsp-test.css}" type="text/css">
     
-    <!-- 뒤로가기 방지 -->
     <script type="text/javascript">
         history.pushState(null, null, location.href);
         window.onpopstate = function() {
             history.go(1);
         }
     </script>
-    
     <title>Spring boot</title>
 </head>
 <body>

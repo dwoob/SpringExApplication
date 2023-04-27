@@ -12,11 +12,11 @@ public class Pagination {
 	
 	public static Map<String,Object> pagination(int totalcount, HttpServletRequest request) {
 		Map<String,Object> map = new HashMap<String,Object>();
-
+		
 		String pnum = request.getParameter("page");
 		System.out.println("pnum"+pnum);
 		if (pnum == null) { pnum = "1"; }
-
+		
 		int rowNUM = Integer.parseInt(pnum);
 		if(rowNUM < 0) {rowNUM = 1;}
 
@@ -28,12 +28,12 @@ public class Pagination {
 		}
 		if(rowNUM > pageNum) { rowNUM = pageNum; }
 
-		int temp = (rowNUM - 1) % 10;
-		int startpage = rowNUM - temp;
+		int temp = (rowNUM - 1) % 10; 
+		int startpage = rowNUM - temp; 
 		int endpage = startpage + (10-1);
 
 		if (endpage > pageNum) { endpage = pageNum; } 
-
+		
 		int offset = (rowNUM - 1) * 10;
 	
 		map.put("rowNUM", rowNUM);
@@ -53,7 +53,7 @@ public class Pagination {
 
 		int rowNUM = Integer.parseInt(pnum);
 		if(rowNUM < 0) {rowNUM = 1;}
-
+	
 		int pageNum;
 		if (Gtotal % pageCount == 0) { pageNum = Gtotal / pageCount; 
 		}else { 
@@ -62,8 +62,8 @@ public class Pagination {
 	
 		if(rowNUM > pageNum) { rowNUM = pageNum; }
 
-		int temp = (rowNUM - 1) % 10;
-		int startpage = rowNUM - temp;
+		int temp = (rowNUM - 1) % 10; 
+		int startpage = rowNUM - temp; 
 		int endpage = startpage + 9;
 
 		if (endpage > pageNum) { endpage = pageNum; } 
@@ -75,7 +75,7 @@ public class Pagination {
 		map.put("endpage", endpage);
 		map.put("pageNum", pageNum);
 		map.put("offset", offset);
-		
+
 		return map;
 	}
 }

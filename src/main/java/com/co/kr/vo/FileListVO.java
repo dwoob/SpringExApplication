@@ -11,5 +11,4 @@ public class FileListVO {
 	private String seq;
 	private String title;
 	private String content;
-	
 }

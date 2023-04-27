@@ -14,5 +14,4 @@ public enum Table {
 	Table(String table){
 		this.table = table;
 	}
-	
 }

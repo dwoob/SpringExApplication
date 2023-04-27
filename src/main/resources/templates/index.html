@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="//www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui-1.12.1.css}">
     <link rel="stylesheet" th:href="@{css/jsp-test.css}" type="text/css">
-    
+
     <script type="text/javascript">
         history.pushState(null, null, location.href);
         window.onpopstate = function() {
@@ -32,6 +33,7 @@
 				    <ul>
 				        <li class="signin"><a  th:href="@{signin}">SIGNIN</a></li>
 				    </ul>
+				    
                 </div>
             </div>
         </div>

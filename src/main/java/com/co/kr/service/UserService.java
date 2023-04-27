@@ -9,30 +9,18 @@ import com.co.kr.domain.LoginDomain;
 public interface UserService {
 
     public LoginDomain mbSelectList(Map<String, String> map);
-    
-    public List<LoginDomain> mbAllList(Map<String, Integer> map);
-    
-    public static int mbGetAll() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-    public static void mbCreate(LoginDomain loginDomain) {
-		// TODO Auto-generated method stub
-		
-	}
+    public List<LoginDomain> mbAllList(Map<String, Integer> map);
+
+    public int mbGetAll();
+
+    public void mbCreate(LoginDomain loginDomain);
 
     public LoginDomain mbGetId(Map<String, String> map);
-    
-    public static int mbDuplicationCheck(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
+    public int mbDuplicationCheck(Map<String, String> map);
 
     public void mbUpdate(LoginDomain loginDomain); 
 
-    public static void mbRemove(Map<String, String> map) {
-		// TODO Auto-generated method stub
-	} 
-    
+    public void mbRemove(Map<String, String> map); 
 }

@@ -12,16 +12,13 @@
        }
     </script>
 </th:block>
-
 <head>
     <title>보드정보</title>
 </head>
-
 <div th:if=${session.id} layout:fragment="content">
     <div class="container">
         <th:block th:include="board/clauseEdit.html"></th:block>
         <th:block th:include="board/list.html"></th:block>
     </div>
 </div>
-
 </html>
